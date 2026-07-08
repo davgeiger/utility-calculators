@@ -1,54 +1,89 @@
 import { Slider } from "@/components/ui/slider"
-import { useState } from "react"
-
-const timeRegex = /^\d{1,2}:\d{2}$/
-
-function calculateNewTime(minutes: string, speedIndex: number) {
-  if (!timeRegex.test(minutes)) return ""
-
-  const [min, seconds] = minutes.split(":").map(Number)
-
-  const totalSeconds = min * 60 + seconds
-  const roundedTotalSeconds = Math.round(totalSeconds / speedIndex)
-  const newMinutes = Math.floor(roundedTotalSeconds / 60)
-  const newSeconds = roundedTotalSeconds % 60
-
-  const formattedMinutes = String(newMinutes).padStart(2, "0")
-  const formattedSeconds = String(newSeconds).padStart(2, "0")
-
-  return `${formattedMinutes}:${formattedSeconds}`
-}
+import { useEffect, useState } from "react"
+import { getVideoDuration } from "./utils/youtube"
+import { calculateDuration, formatDuration, parseTime } from "./utils/time"
 
 export default function VideoSpeedCalculator() {
+  // Input states
   const [minutes, setMinutes] = useState("")
+  const [link, setLink] = useState("")
+
+  // Slider state
   const [speedIndex, setSpeedIndex] = useState(1)
 
+  // Time state
+  const [duration, setDuration] = useState<number | null>(null)
+
+  useEffect(() => {
+    async function fetchDuration() {
+      try {
+        const result = await getVideoDuration(link)
+
+        if (result === "") {
+          setDuration(null)
+          return
+        }
+
+        setDuration(result)
+      } catch (error) {
+        console.error(error)
+        setDuration(null)
+      }
+    }
+
+    fetchDuration()
+  }, [link])
+
+  const totalSeconds = parseTime(minutes) ?? duration
+
+  const calculatedTime =
+    totalSeconds !== null
+      ? formatDuration(calculateDuration(totalSeconds, speedIndex))
+      : ""
+
   return (
-    <>
-      <div className="m-2 flex flex-col gap-2 text-black">
-        <div className="flex gap-2">
+    <div className="m-2 flex flex-col gap-2 text-black">
+      <div className="flex flex-col gap-2">
+        <div className="grid gap-2">
+          <label htmlFor="minutes">Minuten</label>
           <input
             className="rounded-md border border-black p-1"
             type="text"
             id="minutes"
             value={minutes}
-            onChange={(e) => {
-              setMinutes(e.target.value)
-            }}
+            onChange={(e) => setMinutes(e.target.value)}
             placeholder="NN:NN"
+            disabled={link !== ""}
           />
-          <label htmlFor="minutes">Minuten</label>
         </div>
-        <Slider
-          min={1}
-          max={2}
-          step={0.25}
-          value={speedIndex}
-          onValueChange={(value) => setSpeedIndex(value as number)}
-        />
-        <p className="text-center">{speedIndex}</p>
-        <p>{calculateNewTime(minutes, speedIndex)}</p>
+
+        <p>or</p>
+
+        <div className="grid gap-2">
+          <label htmlFor="link">Youtube-Link</label>
+          <input
+            className="rounded-md border border-black p-1"
+            type="text"
+            id="link"
+            value={link}
+            onChange={(e) => setLink(e.target.value)}
+            placeholder="https://www.youtube.com/watch?v=xyz"
+            disabled={minutes !== ""}
+          />
+        </div>
       </div>
-    </>
+
+      <Slider
+        min={1}
+        max={2}
+        step={0.25}
+        value={speedIndex}
+        onValueChange={(value) => setSpeedIndex(value as number)}
+      />
+
+      <p className="text-center">{speedIndex}x</p>
+
+      <p>{calculatedTime}</p>
+    </div>
   )
 }
