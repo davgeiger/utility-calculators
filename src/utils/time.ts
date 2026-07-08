@@ -1,7 +1,8 @@
 const timeRegex = /^\d{1,2}:\d{2}$/
+const ytRegex = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/
 
 export function durationToSeconds(duration: string) {
-  const match = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/)
+  const match = duration.match(ytRegex)
 
   if (!match) return 0
 
