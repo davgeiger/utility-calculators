@@ -47,7 +47,7 @@ export default function VideoSpeedCalculator() {
         <div className="grid gap-2">
           <label htmlFor="minutes">Minuten</label>
           <input
-            className="rounded-md border border-black p-1"
+            className="rounded-md border border-black p-1 transition-colors disabled:cursor-not-allowed disabled:border-red-400 disabled:bg-gray-500 disabled:text-red-300 disabled:opacity-100"
             type="text"
             id="minutes"
             value={minutes}
@@ -62,7 +62,7 @@ export default function VideoSpeedCalculator() {
         <div className="grid gap-2">
           <label htmlFor="link">Youtube-Link</label>
           <input
-            className="rounded-md border border-black p-1"
+            className="rounded-md border border-black p-1 transition-colors disabled:cursor-not-allowed disabled:border-red-400 disabled:bg-gray-500 disabled:text-red-300 disabled:opacity-100"
             type="text"
             id="link"
             value={link}
