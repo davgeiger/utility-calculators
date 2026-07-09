@@ -17,7 +17,7 @@ export default function DonationCalculator() {
 
   return (
     <>
-      <div className="mx-auto flex max-w-2xl flex-col gap-2 p-2 text-black">
+      <div className="flex max-w-2xl flex-col gap-2 p-2 text-black">
         <p>Hinweis: 60 Minuten = 10€</p>
         <div className="flex gap-2">
           {/* Minute input */}
