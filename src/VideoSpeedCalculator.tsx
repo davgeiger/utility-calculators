@@ -58,7 +58,7 @@ export default function VideoSpeedCalculator() {
           />
         </div>
 
-        <p>or</p>
+        <p>oder</p>
 
         <div className="grid gap-2">
           <label htmlFor="link">Youtube-Link</label>
