@@ -34,6 +34,7 @@ export default function VideoSpeedCalculator() {
     fetchDuration()
   }, [link])
 
+  // Either seconds come from minute or yt input
   const totalSeconds = parseTime(minutes) ?? duration
 
   const calculatedTime =
