@@ -19,7 +19,7 @@ export default function VideoSpeedCalculator() {
       try {
         const result = await getVideoDuration(link)
 
-        if (result === "") {
+        if (result === 0) {
           setDuration(null)
           return
         }
