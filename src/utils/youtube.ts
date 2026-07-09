@@ -12,8 +12,8 @@ function getVideoId(url: string) {
   return parsedUrl.searchParams.get("v")
 }
 
-export async function getVideoDuration(videoUrl: string) {
-  if (!videoUrl) return ""
+export async function getVideoDuration(videoUrl: string): Promise<number> {
+  if (!videoUrl) return 0
 
   const videoId = getVideoId(videoUrl)
 
@@ -29,11 +29,12 @@ export async function getVideoDuration(videoUrl: string) {
 
   const data = await response.json()
 
-  console.log(response.status)
-  console.log(data)
-
   if (!response.ok) {
     throw new Error("API-Anfrage fehlgeschlagen")
+  }
+
+  if (!data.items?.length) {
+    throw new Error("Video nicht gefunden.")
   }
 
   return durationToSeconds(data.items[0].contentDetails.duration)
