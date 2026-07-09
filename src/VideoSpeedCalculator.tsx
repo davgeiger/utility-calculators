@@ -15,6 +15,11 @@ export default function VideoSpeedCalculator() {
   const [duration, setDuration] = useState<number | null>(null)
 
   useEffect(() => {
+    if (!link.trim()) {
+      setDuration(null)
+      return
+    }
+
     async function fetchDuration() {
       try {
         const result = await getVideoDuration(link)
