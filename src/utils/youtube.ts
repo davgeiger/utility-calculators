@@ -33,7 +33,6 @@ export async function getVideoDuration(videoUrl: string): Promise<number> {
   const data = await response.json()
 
   if (!response.ok) {
-    console.error("YouTube API:", data)
     throw new Error(data.error?.message ?? "API-Anfrage fehlgeschlagen")
   }
 
