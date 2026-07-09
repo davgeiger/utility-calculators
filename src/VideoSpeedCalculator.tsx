@@ -15,15 +15,19 @@ export default function VideoSpeedCalculator() {
   const [duration, setDuration] = useState<number | null>(null)
 
   useEffect(() => {
-    if (!link.trim()) {
+    const trimmed = link.trim()
+
+    if (
+      !trimmed.startsWith("https://www.youtube.com/") &&
+      !trimmed.startsWith("https://youtu.be/")
+    ) {
       setDuration(null)
       return
     }
 
     const timeout = setTimeout(async () => {
       try {
-        const result = await getVideoDuration(link)
-        setDuration(result || null)
+        setDuration(await getVideoDuration(trimmed))
       } catch (error) {
         console.error(error)
         setDuration(null)
