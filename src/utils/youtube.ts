@@ -1,15 +1,17 @@
 import { durationToSeconds } from "./time"
 
 function getVideoId(url: string) {
-  const parsedUrl = new URL(url)
+  try {
+    const parsedUrl = new URL(url)
 
-  // https://youtu.be/abc123
-  if (parsedUrl.hostname === "youtu.be") {
-    return parsedUrl.pathname.slice(1)
+    if (parsedUrl.hostname === "youtu.be") {
+      return parsedUrl.pathname.slice(1)
+    }
+
+    return parsedUrl.searchParams.get("v")
+  } catch {
+    return null
   }
-
-  // https://www.youtube.com/watch?v=abc123
-  return parsedUrl.searchParams.get("v")
 }
 
 export async function getVideoDuration(videoUrl: string): Promise<number> {
