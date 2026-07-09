@@ -22,8 +22,6 @@ export async function getVideoDuration(videoUrl: string) {
   }
 
   const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY
-  console.log(import.meta.env)
-  console.log(import.meta.env.VITE_YOUTUBE_API_KEY)
 
   const response = await fetch(
     `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${videoId}&key=${apiKey}`
