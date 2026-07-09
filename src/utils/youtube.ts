@@ -27,14 +27,14 @@ export async function getVideoDuration(videoUrl: string) {
     `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${videoId}&key=${apiKey}`
   )
 
-  if (!response.ok) {
-    throw new Error("API-Anfrage fehlgeschlagen")
-  }
-
   const data = await response.json()
 
   console.log(response.status)
   console.log(data)
+
+  if (!response.ok) {
+    throw new Error("API-Anfrage fehlgeschlagen")
+  }
 
   return durationToSeconds(data.items[0].contentDetails.duration)
 }
