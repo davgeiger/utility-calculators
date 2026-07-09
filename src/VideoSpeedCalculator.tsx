@@ -20,23 +20,17 @@ export default function VideoSpeedCalculator() {
       return
     }
 
-    async function fetchDuration() {
+    const timeout = setTimeout(async () => {
       try {
         const result = await getVideoDuration(link)
-
-        if (result === 0) {
-          setDuration(null)
-          return
-        }
-
-        setDuration(result)
+        setDuration(result || null)
       } catch (error) {
         console.error(error)
         setDuration(null)
       }
-    }
+    }, 500)
 
-    fetchDuration()
+    return () => clearTimeout(timeout)
   }, [link])
 
   // Either seconds come from minute or yt input
