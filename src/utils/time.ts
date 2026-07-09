@@ -1,4 +1,5 @@
-const timeRegex = /^\d{1,2}:\d{2}$/
+const timeRegex = /^\d+:[0-5]\d$/
+const minutesRegex = /^\d+$/
 const ytRegex = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/
 
 export function durationToSeconds(duration: string) {
@@ -14,18 +15,27 @@ export function durationToSeconds(duration: string) {
 }
 
 export function parseTime(input: string): number | null {
-  if (!timeRegex.test(input)) return null
+  input = input.trim()
 
-  const [minutes, seconds] = input.split(":").map(Number)
+  // Eingabe wie "10"
+  if (minutesRegex.test(input)) {
+    return Number(input) * 60
+  }
 
-  return minutes * 60 + seconds
+  // Eingabe wie "05:30"
+  if (timeRegex.test(input)) {
+    const [minutes, seconds] = input.split(":").map(Number)
+    return minutes * 60 + seconds
+  }
+
+  return null
 }
 
 export function calculateDuration(totalSeconds: number, speed: number): number {
   return Math.round(totalSeconds / speed)
 }
 
-export function formatDuration(totalSeconds: number) {
+export function formatVideoDuration(totalSeconds: number) {
   const hours = Math.floor(totalSeconds / 3600)
   const minutes = Math.floor((totalSeconds % 3600) / 60)
   const seconds = totalSeconds % 60
@@ -35,4 +45,41 @@ export function formatDuration(totalSeconds: number) {
   }
 
   return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`
+}
+
+export function formatDonationDuration(totalSeconds: number) {
+  totalSeconds = Math.round(totalSeconds)
+  const totalMinutes = Math.floor(totalSeconds / 60)
+  const seconds = totalSeconds % 60
+
+  // Bis einschließlich 60 Minuten: MM:SS
+  if (totalMinutes <= 60) {
+    return `${totalMinutes}:${String(seconds).padStart(2, "0")}`
+  }
+
+  // Ab 61 Minuten: HH:MM:SS
+  const hours = Math.floor(totalMinutes / 60)
+  const minutes = totalMinutes % 60
+
+  return `${hours}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`
+}
+
+export function minutesToSeconds(minutes: number) {
+  return minutes * 60
+}
+
+export function secondsToMinutes(seconds: number) {
+  return seconds / 60
+}
+
+export function donationFromSeconds(seconds: number) {
+  return (seconds / 60 / 6).toFixed(2)
+}
+
+export function secondsFromDonation(euro: number) {
+  return Math.round(euro * 6 * 60)
+}
+
+export function parseEuro(input: string) {
+  return Number(input.replace(",", "."))
 }

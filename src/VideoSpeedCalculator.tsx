@@ -1,7 +1,7 @@
 import { Slider } from "@/components/ui/slider"
 import { useEffect, useState } from "react"
 import { getVideoDuration } from "./utils/youtube"
-import { calculateDuration, formatDuration, parseTime } from "./utils/time"
+import { calculateDuration, formatVideoDuration, parseTime } from "./utils/time"
 
 export default function VideoSpeedCalculator() {
   // Input states
@@ -39,7 +39,7 @@ export default function VideoSpeedCalculator() {
 
   const calculatedTime =
     totalSeconds !== null
-      ? formatDuration(calculateDuration(totalSeconds, speedIndex))
+      ? formatVideoDuration(calculateDuration(totalSeconds, speedIndex))
       : ""
 
   return (
