@@ -13,8 +13,6 @@ function getVideoId(url: string) {
 }
 
 export async function getVideoDuration(videoUrl: string): Promise<number> {
-  if (!videoUrl) return 0
-
   const videoId = getVideoId(videoUrl)
 
   if (!videoId) {
