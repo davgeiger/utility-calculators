@@ -33,5 +33,8 @@ export async function getVideoDuration(videoUrl: string) {
 
   const data = await response.json()
 
+  console.log(response.status)
+  console.log(data)
+
   return durationToSeconds(data.items[0].contentDetails.duration)
 }
